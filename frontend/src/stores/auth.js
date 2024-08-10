@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import axios from "axios";
+// import axios from "axios";
+import { authAxios } from "../axiosInstances";
 
 export const useAuthStore = defineStore("auth",{
     state:()=>({
@@ -11,17 +12,17 @@ export const useAuthStore = defineStore("auth",{
     actions:{
         async getToken() 
             {
-              await axios.get('/sanctum/csrf-cookie');
+              await authAxios.get('/sanctum/csrf-cookie');
             },
             async getUser(){
               this.getToken();
-              const data = await axios.get('/api/user');
+              const data = await authAxios.get('/api/user');
               this.authUser =data.data;
             },
 
             async handleLogin (data) {
               await this.getToken();
-              await axios.post('/login', {
+              await authAxios.post('/login', {
                   email: data.email,
                   password: data.password,
               });
@@ -31,7 +32,7 @@ export const useAuthStore = defineStore("auth",{
 
             async handleRegister(data)  {
               await this.getToken();
-              await axios.post('/register', {
+              await authAxios.post('/register', {
                 name: data.name,
                 email: data.email,
                 password: data.password,
@@ -40,7 +41,7 @@ export const useAuthStore = defineStore("auth",{
                this.router.push('/'); 
             },
             async handleLogout(){
-              await axios.post("/logout");
+              await authAxios.post("/logout");
               this.authUser = null;
             }
     },

@@ -22,4 +22,10 @@ const authStore = useAuthStore();
         <h1>go and login</h1>
 
     </div>
+
+
+
+
+
+   
 </template>
