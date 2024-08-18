@@ -22,29 +22,63 @@ export default function useArts(){
         art.value =response.data.data;
     }
 // store data
-    const storeArt = async (data) => {
-    try{
-        await crudAxios.post("arts", data);
-        await router.push({name: "ArtIndex"});
+// const storeArt = async (data) => {
+//     try{
+//         await crudAxios.post("arts", data);
+//         await router.push({name: "ArtIndex"});
 
-    }catch(error){
-        if(error.response.status === 422){
+//     }catch(error){
+//         if(error.response.status === 422){
+//             errors.value = error.response.data.errors;
+//         }
+//     }
+// }
+const storeArt = async (data) => {
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('artist', data.artist);
+    // if (data.image) {
+        formData.append('image', data.image);
+    // }
+
+    try {
+        await crudAxios.post("arts", formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        await router.push({ name: "ArtIndex" });
+    } catch (error) {
+        if (error.response.status === 422) {
             errors.value = error.response.data.errors;
         }
     }
-}
-// update data
-    const updateArt = async (id) =>{
-        try{
-            await crudAxios.put("arts/" + id, art.value);
-            await router.push({name: "ArtIndex"});
-        }catch(error){
-            if(error.response.status === 422){
-            errors.value = error.response.data.errors;
-            }
-        }
+};
 
-    };
+// update data
+const updateArt = async (id, data) => {
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('artist', data.artist);
+    if (data.image) {
+        formData.append('image', data.image);
+    }
+
+    try {
+        await crudAxios.post(`arts/${id}?_method=PUT`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        await router.push({ name: "ArtIndex" });
+    } catch (error) {
+        if (error.response.status === 422) {
+            errors.value = error.response.data.errors;
+        }
+    }
+};
+
+
 // delete data
 
     const destroyArt = async (id) =>{

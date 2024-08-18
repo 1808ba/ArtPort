@@ -8,7 +8,7 @@ const authStore = useAuthStore();
  <nav class="navbar">
     <div class="navbar-container">
       <!-- Logo -->
-      <a href="#" class="navbar-logo">Brand</a>
+      <a href="#" class="navbar-logo">Art Gallery</a>
       
       <!-- Links -->
       <ul class="navbar-menu">

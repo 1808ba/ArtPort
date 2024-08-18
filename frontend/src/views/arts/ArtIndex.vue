@@ -1,37 +1,52 @@
 <script setup>
-import  useArts  from "../../stores/arts";
 import { onMounted } from "vue";
+import useArts from "../../stores/arts";
+import { useAuthStore } from '../../stores/auth';
 
+const authStore = useAuthStore();
 
-const { arts , getArts , destroyArt } = useArts();
+const { arts, getArts } = useArts();
 
-onMounted(() => getArts());
-
+onMounted(() => {
+  getArts();
+});
 </script>
+
 <template>
-  <h1>arts index</h1>
-  <RouterLink :to="{name: 'ArtCreate'}" class="px-4 px-2 bg-indigo-500 hover:bg-indigo-700 text-white rounded">New article</RouterLink>
-  <table class="min-w-full bg-white border border-gray-300">
-  <thead>
-    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-      <th class="py-3 px-6 text-left">title</th>
-      <th class="py-3 px-6 text-left">Artist</th>
-     <th class="py-3 px-6 text-left">Actions</th> 
-    </tr>
-  </thead>
-  <tbody class="text-gray-600 text-sm font-light">
-    <tr v-for="art in arts" :key="art.id" class="border-b border-gray-300 hover:bg-gray-100">
-      <td class="py-3 px-6 text-left">{{art.title}}</td>
-      <td class="py-3 px-6 text-left">{{art.artist}}</td>
-      <td >
-        <!-- <RouterLink :to="{name: 'ArtCreate'}" class="px-4 px-2 bg-red-500 hover:bg-black-700 text-white rounded">Delete</RouterLink> -->
-        <button @click="destroyArt(art.id)" class="px-4 px-2 bg-red-500 hover:bg-black-700 text-white rounded">delete</button>
-        <RouterLink :to="{name: 'ArtEdit', params: { id: art.id }}" class="px-4 px-2 bg-indigo-500 hover:bg-indigo-700 text-white rounded">Update</RouterLink>
-      </td>
+  <div class="min-h-screen bg-gray-100 py-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-extrabold text-gray-800">Art Gallery</h2>
+        <RouterLink :to="{name: 'ArtCreate'}" class="px-4 py-2 bg-indigo-500 hover:bg-indigo-700 text-white rounded-lg shadow-md">New Art</RouterLink>
+      </div>
 
-    </tr>
-   
-  </tbody>
-</table>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div v-for="art in arts" :key="art.id" class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <router-link :to="{ name: 'ArtDetail', params: { id: art.id } }">
+            <img v-if="art.image" :src="`http://localhost:8000/storage/${art.image}`" alt="Art Image" class="h-48 w-full object-cover">
+          </router-link>          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800">{{ art.title }}</h3>
+            <p class="text-sm text-gray-600">{{ art.artist }}</p>
+           
+        <template v-if="authStore.user">
 
+            <div class="mt-4 flex justify-between items-center">
+              <router-link :to="{ name: 'ArtEdit', params: { id: art.id } }" class="text-blue-500 hover:underline">Edit</router-link>
+              <button @click="destroyArt(art.id)" class="text-red-500 hover:underline">Delete</button>
+            </div>
+        </template>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+       
+
+
+            
+            
+
+ 
 </template>

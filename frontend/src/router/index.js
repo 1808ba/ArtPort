@@ -26,6 +26,12 @@ const routes =[
     name : 'ArtEdit' ,
     component:()=>import("../views/arts/ArtEdit.vue"),
     props: true
+    }, 
+    {
+    path: '/art/:id',
+    name: 'ArtDetail',
+    component:()=>import('../views/arts/ArtDetail.vue'),
+    props: true
     },
 ];
 const router = createRouter({

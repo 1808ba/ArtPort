@@ -18,7 +18,7 @@ class ArtResource extends JsonResource
         [ 'id' => $this->id,
             'title' => $this->title,
             'artist' => $this->artist,
-
+            'image' =>$this->image,
     ];
     }
 }
